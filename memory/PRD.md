@@ -44,6 +44,7 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 - Cada portada del coverflow abre el catálogo con un filtro exacto por artista.
 - El clic y el gesto de arrastre se distinguen para mantener ambas interacciones.
 - El catálogo conserva el artista en el buscador y permite limpiar o cambiar a una búsqueda general.
+- El carrusel avanza automáticamente hacia la izquierda cada 2 segundos con transición suave, sin interferir con el arrastre manual.
 
 ## Backlog priorizado
 
