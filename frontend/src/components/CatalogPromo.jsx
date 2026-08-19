@@ -1,0 +1,5 @@
+import { QRCodeSVG } from "qrcode.react";
+import { ArrowUpRight, Search } from "lucide-react";
+import { Link } from "react-router-dom";
+
+export const CatalogPromo = ({ songCount }) => <section className="catalog-promo" data-testid="catalog-promo-section"><div className="catalog-promo-inner"><div><p className="eyebrow" data-testid="catalog-eyebrow"><span /> {songCount.toLocaleString("es-ES")} CANCIONES</p><h2 data-testid="catalog-promo-heading">Tu canción<br/>está <em>aquí.</em></h2><p data-testid="catalog-promo-description">Busca por artista o título y prepara tu repertorio antes de subir al escenario.</p><Link to="/catalogo" className="button button--cream" data-testid="catalog-open-button"><Search /> Explorar catálogo <ArrowUpRight /></Link></div><div className="qr-block" data-testid="catalog-qr-code"><div className="qr-frame"><QRCodeSVG value="https://okumekaraoke.com/catalogo" size={172} bgColor="#f8efd2" fgColor="#111713" level="M" /></div><p>Escanea y canta</p><span>okumekaraoke.com</span></div></div></section>;

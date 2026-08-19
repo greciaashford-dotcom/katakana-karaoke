@@ -1,0 +1,2 @@
+import { CoverflowCarousel } from "./CoverflowCarousel";
+export const FeaturedArtists = ({ artists }) => <section id="artistas" className="section section--artists" data-testid="featured-artists-section"><div className="section-heading"><div><p className="eyebrow" data-testid="artists-eyebrow"><span /> EN EL ESCENARIO</p><h2 data-testid="artists-heading">Artistas destacados</h2></div><p data-testid="artists-intro">Clásicos universales, pop latino y grandes himnos. Desliza para encontrar tu próximo momento estelar.</p></div><CoverflowCarousel slides={artists} /></section>;
