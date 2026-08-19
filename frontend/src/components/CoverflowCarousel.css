@@ -1,0 +1,10 @@
+.coverflow-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.coverflow-card:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 4px;
+}

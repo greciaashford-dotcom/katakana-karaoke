@@ -35,9 +35,10 @@ const createPublicRoutes = (db, config, authenticate) => {
 
   router.get("/songs", async (req, res) => {
     const query = clean(req.query.q).slice(0, 100);
+    const artist = clean(req.query.artist).slice(0, 120);
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
     const limit = Math.min(60, Math.max(12, Number.parseInt(req.query.limit, 10) || 30));
-    const filter = query ? { search: { $regex: escapeRegex(normalize(query)) } } : {};
+    const filter = artist ? { artist } : query ? { search: { $regex: escapeRegex(normalize(query)) } } : {};
     const [items, total] = await Promise.all([
       db.collection("songs").find(filter, { projection: { _id: 0, search: 0 } }).sort({ artist: 1, title: 1 }).skip((page - 1) * limit).limit(limit).toArray(),
       db.collection("songs").countDocuments(filter),

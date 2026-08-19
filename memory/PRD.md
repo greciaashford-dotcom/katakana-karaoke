@@ -40,6 +40,11 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 - Seguridad: rate limit de login, Helmet, validación, autorización en servidor y respuestas MongoDB saneadas.
 - Compilación de producción correcta; pruebas backend 12/12 y flujo frontend completo aprobados.
 
+### 2026-08-19 — Navegación por artista
+- Cada portada del coverflow abre el catálogo con un filtro exacto por artista.
+- El clic y el gesto de arrastre se distinguen para mantener ambas interacciones.
+- El catálogo conserva el artista en el buscador y permite limpiar o cambiar a una búsqueda general.
+
 ## Backlog priorizado
 
 ### P0 — Bloqueantes
