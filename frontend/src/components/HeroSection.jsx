@@ -9,5 +9,4 @@ export const HeroSection = ({ settings }) => <section className="hero" data-test
     <p className="hero-copy" data-testid="hero-description">{settings.heroDescription}</p>
     <div className="hero-actions"><a href="#reservas" className="button button--primary" data-testid="hero-reserve-button">Reserva <ArrowDownRight /></a><a href="/catalogo" className="button button--ghost" data-testid="hero-catalog-button"><Music2 /> Lista de canciones</a></div>
   </div>
-  <div className="hero-index" data-testid="hero-brand-mark">OKUME<br/><em>01</em></div>
 </section>;

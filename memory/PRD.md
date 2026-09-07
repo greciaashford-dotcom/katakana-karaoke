@@ -46,6 +46,10 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 - El catálogo conserva el artista en el buscador y permite limpiar o cambiar a una búsqueda general.
 - El carrusel avanza automáticamente hacia la izquierda cada 2 segundos con transición suave, sin interferir con el arrastre manual.
 
+### 2026-08-19 — Ajustes visuales de cabecera
+- Logo principal ampliado un 80% manteniendo adaptación responsive.
+- Eliminado el indicador decorativo “OKUME 01” del hero.
+
 ## Backlog priorizado
 
 ### P0 — Bloqueantes
