@@ -50,12 +50,25 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 - Logo principal ampliado un 80% manteniendo adaptación responsive.
 - Eliminado el indicador decorativo “OKUME 01” del hero.
 
+### 2026-06 — Legal, peticiones de canciones, clientes y email marketing (Resend)
+- **Páginas legales** conformes a RGPD/LOPDGDD/LSSI-CE: `/privacidad`, `/terminos`, `/cookies` (contenido en español) con `LegalLayout` reutilizable (cabecera + pie).
+- **Banner de consentimiento de cookies** (`CookieConsent`) con aceptar/rechazar, persistido en `localStorage`, enlazado desde el pie.
+- **Peticiones de canciones**: cada canción del catálogo tiene un botón que abre un modal (`SongRequestModal`) donde el invitado indica su correo (nombre opcional). `POST /api/song-requests` crea la petición con `dateKey` en zona Europe/Madrid y registra al cliente. El correo se recuerda en `localStorage`.
+- **Cola de canciones (admin)**: nueva vista `Cola de canciones` con columnas «Por sonar» / «Ya sonaron», check para marcar reproducidas (y deshacer), borrado y filtro por fecha (día actual por defecto).
+- **Clientes + Email marketing (admin)**: vista `Clientes` con la lista capturada desde reservas y peticiones, y compositor de campañas que envía por Resend (`POST /api/admin/campaigns`, devuelve enviados/fallidos).
+- **Correos automáticos (Resend)**: correo de bienvenida con marca/colores (#29493a, #f8efd2, #ff665a) y logo al capturar un correo por primera vez; seguimiento a las 130 h mediante cron de plataforma (`.emergent/crons.yml` → `POST /api/cron/followup`, protegido con `WEBHOOK_CRON_SECRET` y `timingSafeEqual`, ACK 202 + trabajo en `setImmediate`).
+- **Reservas modernizadas**: formulario en 2 pasos (stepper de personas, fecha/hora → nombre, correo, teléfono, notas) con captura de correo del cliente.
+- **Datos nuevos**: colecciones `clients` (email único), `songRequests` (índice `dateKey`+`createdAt`), `campaigns`. Estadísticas del panel ampliadas con `clients` y `requestsToday`.
+- **Estado Resend**: la cuenta NO tiene dominio verificado, por lo que en modo prueba solo entrega al propietario (`greciaashford@gmail.com`) y con cuota diaria muy baja. Los endpoints funcionan; para envío real a clientes hay que verificar un dominio en resend.com/domains y cambiar el remitente.
+- Pruebas: backend 21/21 (12 regresión + 9 nuevas) y E2E frontend de todas las funciones nuevas aprobadas (iteración 2).
+
 ## Backlog priorizado
 
 ### P0 — Bloqueantes
 - Ninguno.
 
 ### P1 — Próxima fase
+- **Verificar un dominio en Resend** (resend.com/domains) y cambiar el remitente para entregar correos a clientes reales (hoy solo entrega al propietario en modo prueba).
 - Cambio de contraseña desde el panel y recuperación segura de acceso.
 - Avisos automáticos al equipo cuando entra una nueva reserva.
 - Filtros por fecha y exportación CSV de reservas.

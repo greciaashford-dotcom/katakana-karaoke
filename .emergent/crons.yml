@@ -1,0 +1,8 @@
+crons:
+  - name: okume-followup
+    description: "Envía el correo de seguimiento a los clientes 130 horas después del correo de bienvenida"
+    cron: "*/30 * * * *"
+    endpoint: "{{BASE_URL}}/api/cron/followup"
+    method: POST
+    # Cron endpoints must ack 2xx immediately; enqueue/background the actual work.
+    enabled: true

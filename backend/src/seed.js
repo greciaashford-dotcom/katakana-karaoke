@@ -7,6 +7,8 @@ const seedDatabase = async (db, config) => {
     db.collection("users").createIndex({ email: 1 }, { unique: true }),
     db.collection("songs").createIndex({ search: 1 }),
     db.collection("reservations").createIndex({ createdAt: -1 }),
+    db.collection("clients").createIndex({ email: 1 }, { unique: true }),
+    db.collection("songRequests").createIndex({ dateKey: 1, createdAt: 1 }),
   ]);
 
   await db.collection("users").updateOne(

@@ -1,7 +1,9 @@
 const express = require("express");
 const crypto = require("crypto");
+const { sendCampaignEmail } = require("./email");
 
 const clean = (value = "") => value.toString().trim();
+const madridDateKey = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Madrid", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
 const allowedStatus = new Set(["pending", "confirmed", "completed", "cancelled"]);
 
 const createAdminRoutes = (db, authenticate, requireAdmin) => {
@@ -9,11 +11,13 @@ const createAdminRoutes = (db, authenticate, requireAdmin) => {
   router.use(authenticate, requireAdmin);
 
   router.get("/stats", async (_req, res) => {
-    const [reservations, pending, artists, songs] = await Promise.all([
+    const today = madridDateKey(new Date());
+    const [reservations, pending, artists, songs, clients, requestsToday] = await Promise.all([
       db.collection("reservations").countDocuments(), db.collection("reservations").countDocuments({ status: "pending" }),
       db.collection("artists").countDocuments(), db.collection("songs").estimatedDocumentCount(),
+      db.collection("clients").countDocuments(), db.collection("songRequests").countDocuments({ dateKey: today, status: "queued" }),
     ]);
-    res.json({ reservations, pending, artists, songs });
+    res.json({ reservations, pending, artists, songs, clients, requestsToday });
   });
   router.put("/settings", async (req, res) => {
     const update = {
@@ -48,6 +52,36 @@ const createAdminRoutes = (db, authenticate, requireAdmin) => {
   router.get("/reservations", async (req, res) => { const filter = allowedStatus.has(req.query.status) ? { status: req.query.status } : {}; res.json({ items: await db.collection("reservations").find(filter, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray() }); });
   router.patch("/reservations/:id", async (req, res) => { if (!allowedStatus.has(req.body.status)) return res.status(400).json({ error: "Estado no válido" }); const result = await db.collection("reservations").findOneAndUpdate({ id: req.params.id }, { $set: { status: req.body.status, updatedAt: new Date().toISOString() } }, { returnDocument: "after", projection: { _id: 0 } }); if (!result) return res.status(404).json({ error: "Reserva no encontrada" }); res.json({ reservation: result }); });
   router.delete("/reservations/:id", async (req, res) => { const result = await db.collection("reservations").deleteOne({ id: req.params.id }); if (!result.deletedCount) return res.status(404).json({ error: "Reserva no encontrada" }); res.status(204).end(); });
+
+  router.get("/clients", async (_req, res) => res.json({ items: await db.collection("clients").find({}, { projection: { _id: 0 } }).sort({ createdAt: -1 }).toArray() }));
+  router.delete("/clients/:id", async (req, res) => { const result = await db.collection("clients").deleteOne({ id: req.params.id }); if (!result.deletedCount) return res.status(404).json({ error: "Cliente no encontrado" }); res.status(204).end(); });
+  router.post("/campaigns", async (req, res) => {
+    const subject = clean(req.body.subject).slice(0, 160);
+    const message = clean(req.body.message).slice(0, 5000);
+    if (!subject || !message) return res.status(400).json({ error: "Asunto y mensaje son obligatorios" });
+    const clients = await db.collection("clients").find({}, { projection: { _id: 0, email: 1, name: 1 } }).toArray();
+    let sent = 0;
+    let failed = 0;
+    for (const contact of clients) {
+      const ok = await sendCampaignEmail(db, contact.email, subject, message);
+      ok ? (sent += 1) : (failed += 1);
+    }
+    await db.collection("campaigns").insertOne({ id: crypto.randomUUID(), subject, message, total: clients.length, sent, failed, createdAt: new Date().toISOString() });
+    res.json({ total: clients.length, sent, failed });
+  });
+
+  router.get("/song-requests", async (req, res) => {
+    const date = /^\d{4}-\d{2}-\d{2}$/.test(req.query.date || "") ? req.query.date : madridDateKey(new Date());
+    const items = await db.collection("songRequests").find({ dateKey: date }, { projection: { _id: 0 } }).sort({ status: 1, createdAt: 1 }).toArray();
+    res.json({ items, date });
+  });
+  router.patch("/song-requests/:id", async (req, res) => {
+    const status = req.body.status === "played" ? "played" : "queued";
+    const result = await db.collection("songRequests").findOneAndUpdate({ id: req.params.id }, { $set: { status, playedAt: status === "played" ? new Date().toISOString() : null } }, { returnDocument: "after", projection: { _id: 0 } });
+    if (!result) return res.status(404).json({ error: "Petición no encontrada" });
+    res.json({ request: result });
+  });
+  router.delete("/song-requests/:id", async (req, res) => { const result = await db.collection("songRequests").deleteOne({ id: req.params.id }); if (!result.deletedCount) return res.status(404).json({ error: "Petición no encontrada" }); res.status(204).end(); });
   return router;
 };
 
