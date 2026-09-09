@@ -1,0 +1,45 @@
+{
+  "summary": "Iteration 3 testing complete. Backend: 10/10 new pytest tests pass (auth, songs limit=6, song-request client upsert + no-duplicate + unsubscribeToken/nextFollowupAt/followupCount fields, unsubscribe GET/POST + masked email + resubscribe + bogus 404, admin clients CRUD + 409 dup + 400 invalid + q/source/subscribed filters, export xlsx with exact 10-column header, import xlsx with created/updated/skipped counts + source=importado + welcomeSentAt null, campaigns list/send-202/poll-to-done, campaigns/test 200 ok:true (Resend live), cron 401 without bearer and 202 with bearer). Frontend Playwright: site-header data-scrolled toggles true on scrollY>28, header search input placeholder '¿Qué cantarás hoy?', nav-reservation-link fully in viewport, typing 'queen' shows up to 6 header-search-result-* items + view-all navigates to /canciones-karaoke-madrid?q=queen; header-search hidden on catalog page (verified with proper wait); /catalogo?artist=Queen redirects to /canciones-karaoke-madrid?artist=Queen preserving query; song-request modal flow: first submit shows success + identity 'Pedida como test-ui-...@example.com · ¿No eres tú?', localStorage okume-guest-email stored, second song request auto-submits without form, song-request-change-email clears localStorage and reopens form; location-section + location-map-iframe + whatsapp-button href contains wa.me/34680590364; whatsapp-button absent on /admin/login; favicon /favicon.ico + title exact match; /baja flow: title present, confirm → done title, resubscribe works, bogus token shows unsubscribe-error. Mobile 390x844: mobile-tabbar visible with all 4 tabs, desktop nav hidden, header search font-size 16px, catalog search 18px, no horizontal overflow on home/catalog/privacidad, tab-menu opens mobile-menu-sheet, tab-songs navigates to /canciones-karaoke-madrid, tabbar hidden on desktop 1920x1080. NO ResizeObserver console errors captured during scroll/carousel. Admin: login works, /admin/clientes KPIs (contactos/suscritos/bajas) render, both database and marketing tabs present; add client works (KPI 5→6, toast 'Cliente añadido'); marketing composer contains all 6 fields + admin-campaign-history. All test-only data cleaned up via API at the end.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ClientFormModal", "issue": "data-testids do not match the review spec: implementation uses 'client-form-email', 'client-form-name', 'client-form-phone', 'client-form-submit' while spec requires the '-input'/'-button' suffix ('client-form-email-input', 'client-form-name-input', 'client-form-phone-input', 'client-form-submit-button'). Functionality works; only the contract naming differs.", "selector": "[data-testid='client-form-email']", "priority": "LOW"},
+      {"component": "SiteHeader pill on scroll", "issue": "After window.scrollY>28 the .site-header-inner border-radius computes to ~19.17px on 1920px viewport (getComputedStyle). Spec targets ~26px. Visually still a pill; consider bumping radius or accept as design choice.", "selector": ".site-header-inner", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration3_features.py",
+    "/app/backend/tests/test_okume_new_features.py",
+    "/app/backend/tests/test_okume_api_regression.py",
+    "/app/test_reports/pytest/pytest_iter3.xml"
+  ],
+  "action_items": [
+    "OPTIONAL: rename ClientFormModal data-testids to end with '-input' / '-button' to match the review contract (see ClientFormModal.jsx lines 24–30).",
+    "OPTIONAL: increase .site-header-inner border-radius (currently ~19px on scroll) if the spec 26px is strict."
+  ],
+  "critical_code_review_comments": [
+    "backend/server.js applies a global express.json() before any router; multer routes still work because express.json only parses when Content-Type is application/json. Multipart uploads succeed as long as the client does not force Content-Type: application/json on multipart requests (an issue on some SDKs). Consider adding an explicit skip via express.json({ type: 'application/json' }) or a raw route mount – already implicit but worth documenting.",
+    "adminRoutes /clients/import parses booleans from Excel via clientsExcel.parseClientsWorkbook. Verified 'Sí' becomes subscribed=true and invalid emails are counted as skipped.",
+    "publicRoutes /unsubscribe/:token masks the email but the mask uses '•' bullets which some Gmail clients may render as ??. Consider using '*' for wider compatibility (already handled – mask is only in the JSON response for the /baja page, not the sent email).",
+    "adminRoutes.campaigns POST returns 202 quickly and processes recipients in setImmediate with 600ms sleep between sends. Good pattern; consider adding a hard cap on recipients per campaign to avoid runaway sends.",
+    "SiteHeader hides HeaderSearch on catalog via showSearch=false prop; verified data-testid=header-search DOM node is absent on /canciones-karaoke-madrid.",
+    "SongRequestModal auto-submits on second open when localStorage okume-guest-email is set; verified the auto → success transition, and 'Change email' correctly clears both localStorage keys and reopens the form."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration3_features.py",
+    "/app/test_reports/iteration_3.json",
+    "/app/test_reports/pytest/pytest_iter3.xml"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "admin@okumekaraoke.com / OkumeAdmin2026! (from /app/memory/test_credentials.md). Cron secret loaded from /app/backend/.env WEBHOOK_CRON_SECRET.",
+  "seed_data_creation": "Only example.com test data. All test clients, song-requests, and imported clients created during tests were deleted via admin DELETE endpoints (verified by loop over /api/admin/clients and /api/admin/song-requests filtered by email prefix). Campaign 'TEST Iter3 Campaign' sent only to source='importado' clients (all example.com) and reached status 'done'.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "New backend suite: /app/backend/tests/test_iteration3_features.py (10 tests, ~9s). For multipart uploads from Python requests, use a fresh requests.post (or clear session Content-Type) — the shared api_client fixture sets Content-Type: application/json which if forwarded causes express.json() to try parsing multipart and returns 500. Frontend testids for the client form modal end WITHOUT '-input'/'-button' (client-form-email/name/phone/submit). Cookie banner overlays login button on some viewports — click [data-testid=cookie-accept-button] before admin login.",
+  "rca of the issue": "The two minor UI-testid/pill-radius deltas listed in frontend_issues do not affect functionality; they are naming/design gaps versus the review spec. All 13 batch improvements are implemented and working end-to-end."
+}

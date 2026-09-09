@@ -1,0 +1,10 @@
+export const CATALOG_PATH = "/canciones-karaoke-madrid";
+export const WHATSAPP_NUMBER = "34680590364";
+export const PHONE_DISPLAY = "+34 680 59 03 64";
+export const PHONE_TEL = "+34680590364";
+export const ADDRESS_LINE_1 = "Calle de Coslada, 14";
+export const ADDRESS_LINE_2 = "28028 Madrid";
+export const MAPS_URL = "https://maps.google.com/?q=Calle+de+Coslada+14,+28028+Madrid";
+export const MAPS_EMBED_URL = "https://www.google.com/maps?q=Calle+de+Coslada+14,+28028+Madrid&hl=es&z=16&output=embed";
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("¡Hola Okume! Quiero información para reservar una mesa.")}`;
+export const DEFAULT_LOGO = "https://assets.zyrosite.com/A1a5zx5q1vs656b0/logo_okume_karaoke-removebg-preview-Yyv0x9rkzXcyLOyo.png";

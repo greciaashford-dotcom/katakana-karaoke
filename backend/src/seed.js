@@ -1,6 +1,23 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const { artists, galleryUrls, settings } = require("./defaults");
+const { FOLLOWUP_HOURS } = require("./email");
+
+const migrateClients = async (db) => {
+  const clients = db.collection("clients");
+  await clients.updateMany({ subscribed: { $exists: false } }, { $set: { subscribed: true, unsubscribedAt: null } });
+  const legacy = await clients.find({ $or: [{ unsubscribeToken: { $exists: false } }, { nextFollowupAt: { $exists: false } }] }).toArray();
+  for (const c of legacy) {
+    const base = c.followupSentAt || c.welcomeSentAt || c.createdAt || new Date().toISOString();
+    await clients.updateOne({ id: c.id }, { $set: {
+      unsubscribeToken: c.unsubscribeToken || crypto.randomUUID(),
+      nextFollowupAt: c.nextFollowupAt || (c.subscribed === false ? null : new Date(new Date(base).getTime() + FOLLOWUP_HOURS * 3600 * 1000).toISOString()),
+      lastFollowupAt: c.lastFollowupAt || c.followupSentAt || null, lastEmailAt: c.lastEmailAt || c.followupSentAt || c.welcomeSentAt || null,
+      followupCount: c.followupCount || (c.followupSentAt ? 1 : 0), phone: c.phone || "", notes: c.notes || "",
+    } });
+  }
+};
 
 const seedDatabase = async (db, config) => {
   await Promise.all([
@@ -8,8 +25,11 @@ const seedDatabase = async (db, config) => {
     db.collection("songs").createIndex({ search: 1 }),
     db.collection("reservations").createIndex({ createdAt: -1 }),
     db.collection("clients").createIndex({ email: 1 }, { unique: true }),
+    db.collection("clients").createIndex({ unsubscribeToken: 1 }),
+    db.collection("clients").createIndex({ subscribed: 1, nextFollowupAt: 1 }),
     db.collection("songRequests").createIndex({ dateKey: 1, createdAt: 1 }),
   ]);
+  await migrateClients(db);
 
   await db.collection("users").updateOne(
     { email: config.adminEmail },
