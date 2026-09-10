@@ -5,9 +5,8 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 
 ## Decisiones de arquitectura
 - **Frontend:** React 19, React Router, TanStack Query, Axios, Framer Motion disponible, Shadcn/UI y CSS responsive propio.
-- **Backend principal:** Node.js 20 + Express 5 + MongoDB; API REST bajo `/api`.
-- **Previsualización:** adaptador ASGI transparente en el puerto 8001 que inicia y reenvía al servidor Express interno. La lógica de negocio y persistencia permanecen en Express.
-- **Autenticación:** JWT de 8 horas; el token solo identifica al usuario y el rol se vuelve a consultar en MongoDB en cada petición protegida.
+- **Backend (desde 2026-09-10):** Python FastAPI + Motor (MongoDB) en un único proceso `uvicorn server:app` en el puerto 8001 (`backend/server.py` + paquete `backend/okume/`). Sustituye por completo al antiguo Node/Express + proxy: el contenedor de producción solo tiene Python y el despliegue fallaba con `FileNotFoundError: 'node'`. Los contratos de la API (rutas `/api/*`, formas JSON, errores `{error}` y códigos 201/202/204/401/403/404/409) se mantienen idénticos para el frontend.
+- **Autenticación:** JWT HS256 de 8 horas (PyJWT), contraseñas bcrypt (compatibles con los hashes previos de bcryptjs); el rol se vuelve a consultar en MongoDB en cada petición protegida. Rate limit de login 12/15 min por IP (X-Forwarded-For). Dos cuentas admin sembradas: `ADMIN_EMAIL` y `OWNER_EMAIL` (achat.revente.paris20@gmail.com).
 - **Datos:** identificadores UUID públicos; `_id` de MongoDB excluido de todas las respuestas.
 - **Catálogo:** 88.770 canciones y 16.365 artistas extraídos de 689 páginas; búsqueda normalizada sin acentos y paginación de servidor.
 - **Media:** URLs externas editables. Las 25 portadas iniciales son composiciones gráficas originales sin usar fotografías de artistas.
@@ -76,6 +75,13 @@ Crear una aplicación web full-stack premium y moderna para **Okume Karaoke**, p
 - Datos nuevos en `clients`: `phone, notes, subscribed, unsubscribeToken, unsubscribedAt, nextFollowupAt, lastFollowupAt, lastEmailAt, followupCount`. `campaigns`: `status, source, ctaText, ctaUrl, finishedAt`.
 - Endpoints nuevos: `GET/POST /api/unsubscribe/:token`, `GET /api/admin/clients?q&source&subscribed`, `POST/PUT /api/admin/clients(/:id)`, `GET /api/admin/clients/export`, `POST /api/admin/clients/import` (multipart `file`), `GET /api/admin/campaigns`, `POST /api/admin/campaigns/test`.
 - Pruebas: backend 10/10 nuevas + regresión, E2E frontend desktop y móvil aprobadas (iteración 3, `/app/test_reports/iteration_3.json`). Sin errores ResizeObserver en consola.
+
+### 2026-09-10 — Corrección de despliegue: backend portado a Python (iteración 4)
+- Causa raíz del fallo de deploy: `server.py` lanzaba `node server.js` y la imagen de producción (python:3.11) no tiene Node → `FileNotFoundError: 'node'`, el backend moría y el health check `/health` nunca respondía.
+- Solución: todo el backend Express reescrito en FastAPI puro (`backend/okume/`: `config`, `database`, `auth`, `emails` (SDK resend), `excel_utils` (openpyxl), `seed`, `routes_public`, `routes_admin`). Archivos Node eliminados (`server.js`, `src/`, `package.json`, `node_modules`). `requirements.txt` + `resend`, `openpyxl`.
+- Health check en `GET /health` y `GET /api/health` (`{ok:true, service:"okume-api"}`). Siembra idempotente; el catálogo de 88.770 canciones se carga en segundo plano si la base está vacía (Atlas) para no bloquear el readiness.
+- `.gitignore`: eliminadas las reglas que ocultaban los `.env` (bloqueaban el despliegue). Nueva variable `OWNER_EMAIL` en `backend/.env`.
+- Verificación: deployment_agent PASS; pytest 30/30 (una prueba obsoleta que enviaba campañas a todos los clientes fue eliminada); smoke E2E frontend sin errores 5xx (`/app/test_reports/iteration_4.json`).
 
 ## Backlog priorizado
 

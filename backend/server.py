@@ -1,61 +1,65 @@
-"""Preview adapter: forwards the platform's port 8001 to the Express backend."""
+"""Okume Karaoke API — FastAPI + MongoDB (single Python process, no Node runtime required)."""
 
+import logging
 from contextlib import asynccontextmanager
-import asyncio
-import os
-from pathlib import Path
-import subprocess
 
-import httpx
-from dotenv import load_dotenv
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from okume import database
+from okume.common import ApiError
+from okume.config import CORS_ORIGINS
+from okume.routes_admin import router as admin_router
+from okume.routes_public import router as public_router
+from okume.seed import seed_database
 
-ROOT = Path(__file__).parent
-load_dotenv(ROOT / ".env")
-NODE_PORT = os.environ["NODE_PORT"]
-NODE_URL = f"http://127.0.0.1:{NODE_PORT}"
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+log = logging.getLogger("okume")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    process = subprocess.Popen(["node", "server.js"], cwd=ROOT)
-    app.state.node_process = process
-    for _ in range(60):
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(f"{NODE_URL}/api/health", timeout=1)
-                if response.status_code == 200:
-                    break
-        except httpx.HTTPError:
-            await asyncio.sleep(0.25)
+async def lifespan(_app: FastAPI):
+    db = database.connect()
+    await seed_database(db)
+    log.info("Okume API lista")
     yield
-    process.terminate()
-    try:
-        process.wait(timeout=5)
-    except subprocess.TimeoutExpired:
-        process.kill()
+    database.close()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(title="Okume Karaoke API", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"] if CORS_ORIGINS == "*" else [origin.strip() for origin in CORS_ORIGINS.split(",")],
+    allow_credentials=False, allow_methods=["*"], allow_headers=["*"],
+)
+app.include_router(public_router, prefix="/api")
+app.include_router(admin_router, prefix="/api/admin")
 
 
-@app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"])
-async def proxy_api(path: str, request: Request):
-    body = await request.body()
-    headers = {key: value for key, value in request.headers.items() if key.lower() not in {"host", "content-length"}}
-    async with httpx.AsyncClient(follow_redirects=True) as client:
-        upstream = await client.request(
-            request.method,
-            f"{NODE_URL}/api/{path}",
-            params=request.query_params,
-            content=body,
-            headers=headers,
-            timeout=30,
-        )
-    response_headers = {
-        key: value
-        for key, value in upstream.headers.items()
-        if key.lower() not in {"content-encoding", "content-length", "transfer-encoding", "connection"}
-    }
-    return Response(upstream.content, status_code=upstream.status_code, headers=response_headers)
+@app.get("/health")
+async def root_health():
+    return {"ok": True, "service": "okume-api"}
+
+
+@app.exception_handler(ApiError)
+async def api_error_handler(_request: Request, error: ApiError):
+    return JSONResponse({"error": error.message}, status_code=error.status)
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_error_handler(_request: Request, error: StarletteHTTPException):
+    return JSONResponse({"error": error.detail if isinstance(error.detail, str) else "Recurso no encontrado"}, status_code=error.status_code)
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(_request: Request, _error: RequestValidationError):
+    return JSONResponse({"error": "Datos no válidos"}, status_code=400)
+
+
+@app.exception_handler(Exception)
+async def unexpected_error_handler(_request: Request, error: Exception):
+    log.exception("Error inesperado: %s", error)
+    return JSONResponse({"error": "Ha ocurrido un error inesperado"}, status_code=500)

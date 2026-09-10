@@ -103,20 +103,7 @@ def test_admin_song_requests_date_filter(api_client, base_url, admin_headers):
     assert isinstance(data["items"], list)
 
 
-# Admin: campaigns - returns counts (delivery may fail; API contract check)
-def test_admin_campaign_returns_counts(api_client, base_url, admin_headers):
-    resp = api_client.post(
-        f"{base_url}/api/admin/campaigns",
-        headers=admin_headers,
-        json={"subject": "TEST Campaign", "message": "Hola desde tests automatizados"},
-        timeout=90,
-    )
-    assert resp.status_code == 200
-    data = resp.json()
-    for key in ("total", "sent", "failed"):
-        assert key in data
-        assert isinstance(data[key], int)
-    assert data["sent"] + data["failed"] == data["total"]
+# Admin: campaigns are covered by test_iteration3_features.py (202 + async status poll, source-filtered audience)
 
 
 def test_admin_campaign_requires_subject_and_message(api_client, base_url, admin_headers):

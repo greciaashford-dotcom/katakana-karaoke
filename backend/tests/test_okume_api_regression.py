@@ -8,7 +8,7 @@ def test_health_ok(api_client, base_url):
     response = api_client.get(f"{base_url}/api/health", timeout=30)
     assert response.status_code == 200
     data = response.json()
-    assert data == {"ok": True, "service": "okume-express"}
+    assert data == {"ok": True, "service": "okume-api"}
 
 
 def test_site_payload_and_no_mongo_id_fields(api_client, base_url):
