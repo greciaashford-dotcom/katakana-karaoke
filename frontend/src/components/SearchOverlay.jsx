@@ -63,7 +63,7 @@ const SearchPanel = ({ initial, onClose }) => {
         </div>
         <div className="k-search-foot">
           <span>Intro para ver todo · Esc para cerrar</span>
-          {enabled && data?.total > 0 && <button type="button" className="k-link" style={{ border: 0, background: "none", cursor: "pointer", font: "inherit", fontWeight: 700 }} onClick={() => go({ q })} data-testid="search-overlay-view-all">Ver {formatNumber(data.total)} resultados <ArrowRight /></button>}
+          {enabled && data?.total > 0 && <button type="button" className="k-link" style={{ border: 0, background: "none", cursor: "pointer", font: "inherit", fontWeight: 700 }} onClick={() => go({ q })} data-testid="search-overlay-view-all">Ver {formatNumber(data.total)} {data.total === 1 ? "resultado" : "resultados"} <ArrowRight /></button>}
         </div>
       </div>
       {requestSong && <div onClick={(e) => e.stopPropagation()}><SongRequestModal song={requestSong} onClose={() => setRequestSong(null)} /></div>}

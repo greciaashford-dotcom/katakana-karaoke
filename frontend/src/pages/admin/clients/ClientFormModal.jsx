@@ -2,8 +2,10 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/client";
+import { useEscape } from "@/lib/useEscape";
 
 export const ClientFormModal = ({ client, onClose, onSaved }) => {
+  useEscape(onClose);
   const [form, setForm] = useState({ email: client?.email || "", name: client?.name || "", phone: client?.phone || "", notes: client?.notes || "", subscribed: client ? client.subscribed !== false : true });
   const [saving, setSaving] = useState(false);
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.type === "checkbox" ? e.target.checked : e.target.value });

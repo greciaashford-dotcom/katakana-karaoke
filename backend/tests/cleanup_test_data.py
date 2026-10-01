@@ -22,7 +22,7 @@ def main() -> None:
     session = requests.Session()
     login = session.post(
         f"{base_url}/api/auth/login",
-        json={"email": "admin@okumekaraoke.com", "password": "OkumeAdmin2026!"},
+        json={"email": "admin@karaokekatakana.com", "password": "KatakanaAdmin2026!"},
         timeout=30,
     )
     login.raise_for_status()

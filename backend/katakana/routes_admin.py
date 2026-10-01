@@ -82,7 +82,7 @@ async def update_settings(request: Request):
         "hoursNote": clean(body.get("hoursNote"), 200), "reservationHours": clean(body.get("reservationHours"), 200),
         "notice": clean(body.get("notice"), 240), "googleRating": clean(body.get("googleRating"), 4),
         "googleReviewCount": clean(body.get("googleReviewCount"), 8), "googleReviewsUrl": clean(body.get("googleReviewsUrl"), 1000),
-        "elfsightWidgetId": clean(body.get("elfsightWidgetId"), 80), "updatedAt": now_iso(),
+        "updatedAt": now_iso(),
     }
     if not update["heroTitle"] or not update["heroDescription"] or not update["heroImageUrl"] or not update["logoUrl"]:
         raise ApiError(400, "Completa los campos obligatorios")
@@ -94,8 +94,6 @@ async def update_settings(request: Request):
         if not 1 <= rating <= 5:
             raise ApiError(400, "La valoración de Google debe ser un número entre 1 y 5")
         update["googleRating"] = f"{rating:.1f}"
-    if update["elfsightWidgetId"] and not re.fullmatch(r"[a-zA-Z0-9-]{8,80}", update["elfsightWidgetId"]):
-        raise ApiError(400, "El ID del widget de Elfsight no es válido")
     db = get_db()
     await db.settings.update_one({"id": "main"}, {"$set": update})
     return {"settings": await db.settings.find_one({"id": "main"}, {"_id": 0})}

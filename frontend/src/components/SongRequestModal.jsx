@@ -3,8 +3,10 @@ import { Check, Loader2, Mail, Music4, X } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/client";
 import { clearGuest, getGuest, saveGuest } from "@/lib/guest";
+import { useEscape } from "@/lib/useEscape";
 
 export const SongRequestModal = ({ song, onClose }) => {
+  useEscape(onClose);
   const guest = useRef(getGuest());
   const [email, setEmail] = useState(guest.current.email);
   const [name, setName] = useState(guest.current.name);

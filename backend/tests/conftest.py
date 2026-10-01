@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for Okume public/admin API regression tests."""
+"""Shared pytest fixtures for Katakana public/admin API regression tests."""
 
 import os
 from pathlib import Path
@@ -37,8 +37,8 @@ def api_client() -> requests.Session:
 @pytest.fixture(scope="session")
 def admin_credentials() -> tuple[str, str]:
     # Admin credential fixture for requested private-panel flows
-    email = os.environ.get("TEST_ADMIN_EMAIL", "admin@okumekaraoke.com")
-    password = os.environ.get("TEST_ADMIN_PASSWORD", "OkumeAdmin2026!")
+    email = os.environ.get("TEST_ADMIN_EMAIL", "admin@karaokekatakana.com")
+    password = os.environ.get("TEST_ADMIN_PASSWORD", "KatakanaAdmin2026!")
     return email, password
 
 

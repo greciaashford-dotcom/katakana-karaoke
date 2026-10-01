@@ -1,0 +1,29 @@
+{
+  "summary": "Karaoke Katakana end-to-end testing (backend + frontend). 19/19 pytest backend endpoints pass (health, site, songs search, accent-insensitive, auth, reservations w/ consent, song requests + suggestions, admin stats/auth/CRUD songs/import-export/settings/suggestions/reservations). Frontend: all 15 public routes return 200 with header/footer, unknown /eventos/* and unknown routes redirect correctly, all 9 legacy WordPress redirects work (preserve query strings). Header nav + search overlay (via button and '/' key), hero search → /canciones?q=, mobile tabbar + menu sheet, quick-call tel:+34917260183 and quick-directions Google Maps all present; NO WhatsApp anywhere. Google reviews block shows text + button, rating hidden by default (as spec). Catalog: accent-insensitive search ('rocio jurado'→53 results), language chips, sort, pagination, request modal, suggestion modal, empty state all present. Reservations: /reservas, /reservas?tipo=empresa preselects empresa chip, event-reservation-form on /eventos/cumpleanos with FAQ, micro-reservation-form on /micro-abierto. Admin: login works, 8 sidebar links present, 20.714 song count intact, Catálogo CRUD verified (create song → appears in public /canciones → delete → removed), import/export/suggestions/content/hours all present. Responsive @390px: no horizontal overflow on /, /canciones, /eventos, /contacto. No cookie banner inside /admin.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "SongRequestModal", "issue": "Escape key does not close the modal. Modal only closes via the X button. Clicking outside/pressing Esc leaves backdrop intercepting pointer events, which also blocks surrounding UI. Suggest adding onKeyDown Escape handler.", "selector": "[data-testid=\"song-request-modal\"]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_katakana_api.py", "/app/test_reports/pytest/iteration5.xml"],
+  "action_items": [
+    "Add Escape-key handler to SongRequestModal (and verify SongSuggestionModal + admin SongFormModal + SongsImportModal also respond to Esc for consistency)."
+  ],
+  "critical_code_review_comments": [
+    "routes_admin.py is 551 lines — consider splitting by resource (songs, clients, campaigns, suggestions, reservations) for maintainability.",
+    "update_settings still accepts/validates 'elfsightWidgetId' though the spec says Elfsight was replaced by own Google reviews block — dead field.",
+    "Public /api/songs response trusted entirely from catalog; no explicit rate limiting shown beyond login_limiter — fine for current scale but worth noting.",
+    "Admin fixtures OK. Backend uses async + Motor correctly; no ObjectId leaks observed in responses."
+  ],
+  "updated_files": ["/app/backend/tests/test_katakana_api.py"],
+  "success_rate": {"backend": "100% (19/19)", "frontend": "~98% (all testids and flows verified; one Esc-close UX issue)"},
+  "test_credentials": "admin@karaokekatakana.com / KatakanaAdmin2026! (works)",
+  "seed_data_creation": "Created and cleaned up: test reservation (TEST_User), test song-request, test song-suggestion, admin test song (TEST_SONG_UI_XYZ) created then deleted. Settings PUT round-tripped preserving existing values. Google review rating NOT modified (left empty as spec requires).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend regression suite at /app/backend/tests/test_katakana_api.py (uses pytest-xdist via /app/backend/pytest.ini; run with `python -m pytest backend/tests/test_katakana_api.py -v`). Catalog has 20.714 songs — do NOT use import 'replace' mode. Admin credentials from /app/memory/test_credentials.md. Resend emails intentionally disabled; don't flag missing emails. Legacy /app/backend/tests/test_okume_* files are obsolete.",
+  "rca of the issue": "Esc close bug: SongRequestModal only wires close via X button click; no document keydown listener. Fix: add useEffect subscribing to keydown Escape in the modal component (same for other modals)."
+}

@@ -3,8 +3,10 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/client";
 import { CATALOG_LANGS } from "@/lib/constants";
+import { useEscape } from "@/lib/useEscape";
 
 export const SongFormModal = ({ song, initial, onClose, onSaved }) => {
+  useEscape(onClose);
   const [form, setForm] = useState({ artist: song?.artist || initial?.artist || "", title: song?.title || initial?.title || "", code: song?.code || "", lang: song?.lang || "es" });
   const [saving, setSaving] = useState(false);
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });

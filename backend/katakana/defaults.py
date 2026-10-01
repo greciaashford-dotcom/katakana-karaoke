@@ -74,6 +74,5 @@ def default_settings() -> dict:
         "notice": "",
         "googleRating": "", "googleReviewCount": "",
         "googleReviewsUrl": "https://www.google.com/maps/search/?api=1&query=Karaoke+Katakana+Avenida+de+Am%C3%A9rica+22+Madrid",
-        "elfsightWidgetId": "",
         "updatedAt": now_iso(),
     }

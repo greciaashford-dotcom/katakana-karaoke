@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { FileUp, X } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/client";
+import { useEscape } from "@/lib/useEscape";
 
 export const SongsImportModal = ({ onClose, onDone }) => {
+  useEscape(onClose);
   const fileRef = useRef(null);
   const [mode, setMode] = useState("merge");
   const [file, setFile] = useState(null);

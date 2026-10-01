@@ -3,8 +3,10 @@ import { Check, Mail, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/client";
 import { getGuest, saveGuest } from "@/lib/guest";
+import { useEscape } from "@/lib/useEscape";
 
 export const SongSuggestionModal = ({ initial = {}, onClose }) => {
+  useEscape(onClose);
   const guest = getGuest();
   const [form, setForm] = useState({ title: initial.title || "", artist: initial.artist || "", email: guest.email || "", name: guest.name || "", notes: "" });
   const [sending, setSending] = useState(false);

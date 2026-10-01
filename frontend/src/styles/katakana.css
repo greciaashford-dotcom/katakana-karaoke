@@ -481,6 +481,10 @@ body { background: var(--k-bg); color: var(--k-text); font-family: var(--k-body)
 
 @media (min-width: 901px) {
   .k-song-meta { display: contents; }
+  .k-song > .k-song-meta .k-song-code { grid-column: 1; grid-row: 1; }
+  .k-song > .k-song-main { grid-column: 2; grid-row: 1; }
+  .k-song > .k-song-meta .k-lang { grid-column: 3; grid-row: 1; }
+  .k-song > .k-song-request { grid-column: 4; grid-row: 1; }
 }
 
 @media (max-width: 560px) {
