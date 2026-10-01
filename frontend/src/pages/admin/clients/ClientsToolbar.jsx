@@ -14,7 +14,7 @@ export const ClientsToolbar = ({ filters, onChange, onAdd, onRefresh }) => {
     try {
       const { data } = await api.get("/admin/clients/export", { params: filters, responseType: "blob" });
       const url = URL.createObjectURL(data);
-      const link = Object.assign(document.createElement("a"), { href: url, download: `okume-clientes-${new Date().toISOString().slice(0, 10)}.xlsx` });
+      const link = Object.assign(document.createElement("a"), { href: url, download: `katakana-clientes-${new Date().toISOString().slice(0, 10)}.xlsx` });
       document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
       toast.success("Excel descargado");
     } catch { toast.error("No se pudo exportar"); } finally { setExporting(false); }

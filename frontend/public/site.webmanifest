@@ -1,11 +1,11 @@
 {
-  "name": "Okume Karaoke",
-  "short_name": "Okume",
-  "description": "El karaoke más exclusivo de Madrid",
+  "name": "Karaoke Katakana",
+  "short_name": "Katakana",
+  "description": "Karaoke-bar en Avenida de América, Madrid, desde 2006",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111713",
-  "theme_color": "#29493a",
+  "background_color": "#0f0a08",
+  "theme_color": "#0f0a08",
   "icons": [
     { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }

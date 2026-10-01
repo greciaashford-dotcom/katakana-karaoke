@@ -7,14 +7,14 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const token = localStorage.getItem("okume-admin-token");
+    const token = localStorage.getItem("katakana-admin-token");
     if (!token) return setLoading(false);
-    api.get("/auth/me").then(({ data }) => setUser(data.user)).catch(() => localStorage.removeItem("okume-admin-token")).finally(() => setLoading(false));
+    api.get("/auth/me").then(({ data }) => setUser(data.user)).catch(() => localStorage.removeItem("katakana-admin-token")).finally(() => setLoading(false));
   }, []);
   const value = useMemo(() => ({
     user, loading,
-    login: async (email, password) => { const { data } = await api.post("/auth/login", { email, password }); localStorage.setItem("okume-admin-token", data.token); setUser(data.user); },
-    logout: () => { localStorage.removeItem("okume-admin-token"); setUser(null); },
+    login: async (email, password) => { const { data } = await api.post("/auth/login", { email, password }); localStorage.setItem("katakana-admin-token", data.token); setUser(data.user); },
+    logout: () => { localStorage.removeItem("katakana-admin-token"); setUser(null); },
   }), [user, loading]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

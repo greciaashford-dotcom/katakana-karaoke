@@ -3,14 +3,14 @@ import { LegalLayout } from "@/components/LegalLayout";
 export default function PrivacyPage() {
   return (
     <LegalLayout title="Política de Privacidad" updated="junio de 2026" testid="privacy-page">
-      <p>En <strong>Okume Karaoke</strong> nos comprometemos a proteger tu privacidad y a tratar tus datos personales conforme al Reglamento (UE) 2016/679 (RGPD), la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD) y la Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE).</p>
+      <p>En <strong>Karaoke Katakana</strong> nos comprometemos a proteger tu privacidad y a tratar tus datos personales conforme al Reglamento (UE) 2016/679 (RGPD), la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD) y la Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE).</p>
 
       <h2>1. Responsable del tratamiento</h2>
       <ul>
-        <li><strong>Titular:</strong> Okume Karaoke</li>
-        <li><strong>Domicilio:</strong> Calle de Coslada, 14, 28028 Madrid (España)</li>
-        <li><strong>Teléfono:</strong> +34 680 59 03 64</li>
-        <li><strong>Correo electrónico:</strong> info@okumekaraoke.com</li>
+        <li><strong>Titular:</strong> Rafman 2 Europroducciones SL (Karaoke Katakana)</li>
+        <li><strong>Domicilio:</strong> Avenida de América, 22, 28028 Madrid (España)</li>
+        <li><strong>Teléfono:</strong> +34 917 260 183</li>
+        <li><strong>Correo electrónico:</strong> katakana1700@yahoo.es</li>
       </ul>
 
       <h2>2. Datos que recopilamos</h2>
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
       <ul>
         <li>Gestionar y confirmar tus reservas de mesa.</li>
         <li>Gestionar tu cola de peticiones de canciones durante tu visita.</li>
-        <li>Enviarte un correo de bienvenida y comunicaciones comerciales sobre eventos, promociones y novedades de Okume Karaoke.</li>
+        <li>Enviarte un correo de bienvenida y comunicaciones comerciales sobre eventos, promociones y novedades de Karaoke Katakana.</li>
         <li>Atender tus consultas y mejorar nuestros servicios.</li>
       </ul>
 
@@ -38,13 +38,13 @@ export default function PrivacyPage() {
       </ul>
 
       <h2>5. Conservación de los datos</h2>
-      <p>Conservaremos tus datos mientras exista la relación con Okume Karaoke y no solicites su supresión. Los datos vinculados a comunicaciones comerciales se conservarán hasta que retires tu consentimiento.</p>
+      <p>Conservaremos tus datos mientras exista la relación con Karaoke Katakana y no solicites su supresión. Los datos vinculados a comunicaciones comerciales se conservarán hasta que retires tu consentimiento.</p>
 
       <h2>6. Destinatarios y encargados del tratamiento</h2>
       <p>No cedemos tus datos a terceros salvo obligación legal. Para el envío de correos utilizamos el proveedor <strong>Resend</strong> (Resend, Inc.), que actúa como encargado del tratamiento con las debidas garantías. Puede implicar transferencias internacionales de datos amparadas por las cláusulas contractuales tipo de la Comisión Europea.</p>
 
       <h2>7. Tus derechos</h2>
-      <p>Puedes ejercer en cualquier momento tus derechos de <strong>acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad</strong>, así como revocar tu consentimiento, escribiendo a <a href="mailto:info@okumekaraoke.com">info@okumekaraoke.com</a> indicando el derecho que deseas ejercer. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noreferrer">www.aepd.es</a>).</p>
+      <p>Puedes ejercer en cualquier momento tus derechos de <strong>acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad</strong>, así como revocar tu consentimiento, escribiendo a <a href="mailto:katakana1700@yahoo.es">katakana1700@yahoo.es</a> indicando el derecho que deseas ejercer. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es" target="_blank" rel="noreferrer">www.aepd.es</a>).</p>
 
       <h2>8. Seguridad</h2>
       <p>Aplicamos medidas técnicas y organizativas apropiadas para garantizar un nivel de seguridad adecuado al riesgo y proteger tus datos frente a accesos no autorizados, pérdida o alteración.</p>

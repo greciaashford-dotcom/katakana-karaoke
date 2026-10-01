@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.karaokekatakana.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.karaokekatakana.com/canciones</loc><priority>0.9</priority></url>
+  <url><loc>https://www.karaokekatakana.com/reservas</loc><priority>0.9</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos</loc><priority>0.8</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos/cumpleanos</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos/despedidas</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos/empresas</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos/infantil</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/eventos/fiestas-privadas</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/micro-abierto</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/el-local</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/contacto</loc><priority>0.7</priority></url>
+  <url><loc>https://www.karaokekatakana.com/aviso-legal</loc><priority>0.2</priority></url>
+  <url><loc>https://www.karaokekatakana.com/privacidad</loc><priority>0.2</priority></url>
+  <url><loc>https://www.karaokekatakana.com/cookies</loc><priority>0.2</priority></url>
+</urlset>

@@ -1,29 +1,27 @@
-import { Clock, MapPin, MessageCircle, Navigation, Phone, Train } from "lucide-react";
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, MAPS_EMBED_URL, MAPS_URL, PHONE_DISPLAY, PHONE_TEL, WHATSAPP_URL } from "@/lib/constants";
-import { Reveal } from "@/components/Reveal";
+import { MapPin, Navigation, Phone } from "lucide-react";
+import { HoursList, OpenStatus } from "@/components/OpenStatus";
+import { BUSINESS, DIRECTIONS_URL, MAPS_EMBED_URL, MAPS_URL, TEL_URL } from "@/lib/constants";
 
-export const LocationSection = () => (
-  <section id="ubicacion" className="section location-section" data-testid="location-section">
-    <div className="location-grid">
-      <Reveal className="location-copy">
-        <p className="eyebrow" data-testid="location-eyebrow"><span /> DÓNDE ESTAMOS</p>
-        <h2 data-testid="location-heading">Ven a cantar<br /><em>al barrio de Salamanca.</em></h2>
-        <p className="location-lead" data-testid="location-description">En pleno Madrid, con acceso fácil en metro y a un paso de las mejores noches de la ciudad. Escríbenos y te guiamos hasta la puerta.</p>
-        <ul className="location-facts">
-          <li data-testid="location-address"><MapPin /><span>{ADDRESS_LINE_1}<br />{ADDRESS_LINE_2}</span></li>
-          <li data-testid="location-metro"><Train /><span>Guindalera · Distrito de Salamanca</span></li>
-          <li data-testid="location-hours"><Clock /><span>Consulta horarios y disponibilidad por WhatsApp</span></li>
-        </ul>
-        <div className="location-actions">
-          <a href={MAPS_URL} target="_blank" rel="noreferrer" className="button button--primary" data-testid="location-directions-button"><Navigation /> Cómo llegar</a>
-          <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="button button--ghost" data-testid="location-whatsapp-button"><MessageCircle /> WhatsApp</a>
-          <a href={`tel:${PHONE_TEL}`} className="button button--ghost" data-testid="location-phone-button"><Phone /> {PHONE_DISPLAY}</a>
+export const LocationSection = ({ settings, testid = "location-section" }) => (
+  <section className="k-section k-section--alt" id="ubicacion" data-testid={testid}>
+    <div className="k-container">
+      <div className="k-location">
+        <div>
+          <p className="k-eyebrow">Visítanos</p>
+          <h2 className="k-h2">{BUSINESS.address1}</h2>
+          <p className="k-text" style={{ marginTop: 18 }}>{BUSINESS.address2} · Junto al intercambiador de Avenida de América (Metro L4, L6, L7 y L9) y con conexión directa en autobús con el aeropuerto.</p>
+          <div style={{ marginTop: 26 }}><OpenStatus hours={settings?.hours} testid="location-open-status" /></div>
+          <HoursList hours={settings?.hours} note={settings?.hoursNote} />
+          <div className="k-actions">
+            <a href={DIRECTIONS_URL} target="_blank" rel="noreferrer" className="k-btn k-btn--primary" data-testid="location-directions-button"><Navigation /> Cómo llegar</a>
+            <a href={TEL_URL} className="k-btn k-btn--ghost" data-testid="location-call-button"><Phone /> {BUSINESS.phoneDisplay}</a>
+          </div>
         </div>
-      </Reveal>
-      <Reveal className="location-map" delay={0.15}>
-        <iframe title="Mapa de Okume Karaoke" src={MAPS_EMBED_URL} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" data-testid="location-map-iframe" />
-        <a href={MAPS_URL} target="_blank" rel="noreferrer" className="location-map-badge" data-testid="location-map-badge"><MapPin /> Okume Karaoke · Abrir en Google Maps</a>
-      </Reveal>
+        <div className="k-map">
+          <iframe title="Mapa de Karaoke Katakana" src={MAPS_EMBED_URL} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade" data-testid="location-map" />
+          <a href={MAPS_URL} target="_blank" rel="noreferrer" className="k-map-badge" data-testid="location-map-badge"><MapPin /> Abrir en Google Maps</a>
+        </div>
+      </div>
     </div>
   </section>
 );

@@ -1,5 +1,5 @@
 crons:
-  - name: okume-followup
+  - name: katakana-followup
     description: "Envía el correo de seguimiento a los clientes 130 horas después del correo de bienvenida"
     cron: "*/30 * * * *"
     endpoint: "{{BASE_URL}}/api/cron/followup"

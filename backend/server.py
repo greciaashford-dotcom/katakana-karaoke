@@ -1,4 +1,4 @@
-"""Okume Karaoke API — FastAPI + MongoDB (single Python process, no Node runtime required)."""
+"""Katakana Karaoke API — FastAPI + MongoDB (single Python process, no Node runtime required)."""
 
 import logging
 from contextlib import asynccontextmanager
@@ -9,27 +9,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from okume import database
-from okume.common import ApiError
-from okume.config import CORS_ORIGINS
-from okume.routes_admin import router as admin_router
-from okume.routes_public import router as public_router
-from okume.seed import seed_database
+from katakana import database
+from katakana.common import ApiError
+from katakana.config import CORS_ORIGINS
+from katakana.routes_admin import router as admin_router
+from katakana.routes_public import router as public_router
+from katakana.seed import seed_database
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-log = logging.getLogger("okume")
+log = logging.getLogger("katakana")
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     db = database.connect()
     await seed_database(db)
-    log.info("Okume API lista")
+    log.info("Katakana API lista")
     yield
     database.close()
 
 
-app = FastAPI(title="Okume Karaoke API", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+app = FastAPI(title="Katakana Karaoke API", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"] if CORS_ORIGINS == "*" else [origin.strip() for origin in CORS_ORIGINS.split(",")],
@@ -41,7 +41,7 @@ app.include_router(admin_router, prefix="/api/admin")
 
 @app.get("/health")
 async def root_health():
-    return {"ok": True, "service": "okume-api"}
+    return {"ok": True, "service": "katakana-api"}
 
 
 @app.exception_handler(ApiError)

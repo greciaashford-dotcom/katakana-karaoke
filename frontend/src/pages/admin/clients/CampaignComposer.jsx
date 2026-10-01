@@ -51,7 +51,7 @@ export const CampaignComposer = ({ subscribedCount, onSent }) => {
         <label>Mensaje<textarea required value={form.message} onChange={set("message")} placeholder="Escribe aquí el cuerpo del correo. Separa párrafos con una línea en blanco." data-testid="campaign-message-input" /></label>
         <div className="campaign-grid">
           <label>Texto del botón<input value={form.ctaText} onChange={set("ctaText")} placeholder="Reserva tu mesa" data-testid="campaign-cta-text-input" /></label>
-          <label>Enlace del botón <small>(opcional, por defecto reservas)</small><input value={form.ctaUrl} onChange={set("ctaUrl")} placeholder="https://okumekaraoke.com/#reservas" data-testid="campaign-cta-url-input" /></label>
+          <label>Enlace del botón <small>(opcional, por defecto reservas)</small><input value={form.ctaUrl} onChange={set("ctaUrl")} placeholder="https://www.karaokekatakana.com/reservas" data-testid="campaign-cta-url-input" /></label>
         </div>
         <div className="campaign-actions">
           <button type="button" className="admin-chip" disabled={!valid || Boolean(busy)} onClick={sendTest} data-testid="campaign-test-button"><FlaskConical /> {busy === "test" ? "Enviando prueba…" : `Enviarme una prueba`}</button>

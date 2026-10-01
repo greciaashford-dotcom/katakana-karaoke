@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Cookie } from "lucide-react";
 
-const KEY = "okume-cookie-consent";
+const KEY = "katakana-cookie-consent";
 
 export const CookieConsent = () => {
   const [visible, setVisible] = useState(false);

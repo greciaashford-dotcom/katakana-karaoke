@@ -1,2 +1,21 @@
 import { Reveal } from "@/components/Reveal";
-export const GallerySection = ({ images }) => <section id="eventos" className="section gallery-section" data-testid="events-gallery-section"><Reveal className="section-heading"><div><p className="eyebrow" data-testid="gallery-eyebrow"><span /> NOCHES OKUME</p><h2 data-testid="gallery-heading">Esto pasa<br/>cuando <em>brillas.</em></h2></div><p data-testid="gallery-description">Celebraciones, canciones y esa energía que solo se entiende cuando estás aquí.</p></Reveal><div className="gallery-grid">{images.map((image, index) => <figure key={image.id} className={`gallery-item gallery-item--${index % 5}`} data-testid={`gallery-image-${image.id}`}><img src={image.imageUrl} alt={image.alt} loading="lazy" /></figure>)}</div></section>;
+
+export const GallerySection = ({ images, testid = "gallery-section" }) => {
+  if (!images?.length) return null;
+  return (
+    <section className="k-section" data-testid={testid}>
+      <div className="k-container">
+        <Reveal className="k-heading">
+          <div>
+            <p className="k-eyebrow">Noches Katakana</p>
+            <h2 className="k-h2">Esto pasa cuando <span className="k-grad-text">suena tu canción</span></h2>
+          </div>
+          <p>Cumpleaños, despedidas, Halloween y noches cualquiera que acaban siendo legendarias.</p>
+        </Reveal>
+        <div className="k-gallery">
+          {images.map((img) => <figure key={img.id} data-testid={`gallery-item-${img.id}`}><img src={img.imageUrl} alt={img.alt} loading="lazy" /></figure>)}
+        </div>
+      </div>
+    </section>
+  );
+};

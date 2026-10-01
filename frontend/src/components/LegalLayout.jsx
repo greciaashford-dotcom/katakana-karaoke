@@ -1,19 +1,13 @@
-import { useSiteLogo } from "@/lib/useSiteLogo";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
+import { SiteLayout } from "@/components/SiteLayout";
+import { PageHero } from "@/components/PageHero";
 
-export const LegalLayout = ({ title, updated, testid, children }) => {
-  const logoUrl = useSiteLogo();
-  return (
-    <main className="legal-page page-offset" data-testid={testid}>
-      <SiteHeader logoUrl={logoUrl} />
-      <article className="legal-content">
-        <p className="eyebrow"><span /> INFORMACIÓN LEGAL</p>
-        <h1 className="legal-title" data-testid="legal-title">{title}</h1>
-        <p className="legal-updated">Última actualización: {updated}</p>
-        <div className="legal-body">{children}</div>
-      </article>
-      <SiteFooter logoUrl={logoUrl} />
-    </main>
-  );
-};
+export const LegalLayout = ({ title, updated, testid, children }) => (
+  <SiteLayout title={title} testid={testid}>
+    <PageHero eyebrow="Información legal" title={title} lead={`Última actualización: ${updated}`} testid="legal-hero" />
+    <section className="k-section" style={{ paddingTop: 0 }}>
+      <div className="k-container">
+        <article className="k-legal" data-testid="legal-body">{children}</article>
+      </div>
+    </section>
+  </SiteLayout>
+);

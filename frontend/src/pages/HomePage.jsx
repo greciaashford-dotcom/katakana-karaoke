@@ -1,30 +1,43 @@
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/api/client";
-import { SiteHeader } from "@/components/SiteHeader";
-import { HeroSection } from "@/components/HeroSection";
+import { useSite } from "@/lib/useSite";
+import { SiteLayout } from "@/components/SiteLayout";
+import { HomeHero } from "@/components/home/HomeHero";
+import { ValueBlocks } from "@/components/home/ValueBlocks";
+import { MicroBand } from "@/components/home/MicroBand";
 import { FeaturedArtists } from "@/components/FeaturedArtists";
-import { ReservationSection } from "@/components/ReservationSection";
+import { EventsShowcase } from "@/components/EventsShowcase";
 import { CatalogPromo } from "@/components/CatalogPromo";
 import { GallerySection } from "@/components/GallerySection";
+import { GoogleReviews } from "@/components/GoogleReviews";
 import { LocationSection } from "@/components/LocationSection";
-import { ElfsightReviews } from "@/components/ElfsightReviews";
-import { SiteFooter } from "@/components/SiteFooter";
+import { ReserveCta } from "@/components/ReserveCta";
+import { Reveal } from "@/components/Reveal";
 
 export default function HomePage() {
-  const { data, isLoading, isError } = useQuery({ queryKey: ["site"], queryFn: async () => (await api.get("/site")).data });
-  if (isLoading) return <div className="route-loader" data-testid="site-loading-state">OKUME</div>;
-  if (isError) return <div className="route-error" data-testid="site-error-message">No pudimos cargar Okume. Inténtalo de nuevo en unos segundos.</div>;
+  const { data } = useSite();
+  const settings = data?.settings;
   return (
-    <main className="public-site" data-testid="home-page">
-      <SiteHeader logoUrl={data.settings.logoUrl} transparent />
-      <HeroSection settings={data.settings} />
-      <FeaturedArtists artists={data.artists} />
-      <ReservationSection />
-      <CatalogPromo songCount={data.songCount} />
-      <GallerySection images={data.gallery} />
-      <LocationSection />
-      <ElfsightReviews />
-      <SiteFooter logoUrl={data.settings.logoUrl} />
-    </main>
+    <SiteLayout testid="home-page" description="Karaoke Katakana: karaoke-bar en Avenida de América, Madrid, desde 2006. Más de 20.000 canciones en varios idiomas, sonido digital, tres ambientes y celebraciones.">
+      <HomeHero settings={settings} catalog={data?.catalog} />
+      <ValueBlocks />
+      <FeaturedArtists artists={data?.artists} />
+      <section className="k-section" data-testid="home-events-section">
+        <div className="k-container">
+          <Reveal className="k-heading">
+            <div>
+              <p className="k-eyebrow">Eventos y celebraciones</p>
+              <h2 className="k-h2">Tu celebración, <span className="k-grad-text">con micro</span></h2>
+            </div>
+            <p>Reservamos para grupos de amigos, familias y empresas. Cuéntanos tu plan y te preparamos la noche.</p>
+          </Reveal>
+          <EventsShowcase />
+        </div>
+      </section>
+      <MicroBand />
+      <CatalogPromo catalog={data?.catalog} />
+      <GallerySection images={data?.gallery} />
+      <GoogleReviews settings={settings} />
+      <LocationSection settings={settings} />
+      <ReserveCta />
+    </SiteLayout>
   );
 }

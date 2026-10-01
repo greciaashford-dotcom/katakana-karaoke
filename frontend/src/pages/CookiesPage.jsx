@@ -3,7 +3,7 @@ import { LegalLayout } from "@/components/LegalLayout";
 export default function CookiesPage() {
   return (
     <LegalLayout title="Política de Cookies" updated="junio de 2026" testid="cookies-page">
-      <p>Esta Política de Cookies explica qué son las cookies, cuáles utiliza el sitio web de <strong>Okume Karaoke</strong> y cómo puedes gestionarlas, de acuerdo con la Ley 34/2002 (LSSI-CE) y las directrices de la Agencia Española de Protección de Datos.</p>
+      <p>Esta Política de Cookies explica qué son las cookies, cuáles utiliza el sitio web de <strong>Karaoke Katakana</strong> y cómo puedes gestionarlas, de acuerdo con la Ley 34/2002 (LSSI-CE) y las directrices de la Agencia Española de Protección de Datos.</p>
 
       <h2>1. ¿Qué son las cookies?</h2>
       <p>Las cookies son pequeños archivos de texto que los sitios web almacenan en tu dispositivo cuando los visitas. Sirven para recordar tus preferencias, mejorar tu experiencia y obtener información estadística sobre el uso del sitio.</p>

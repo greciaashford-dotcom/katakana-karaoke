@@ -3,8 +3,14 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" content="#29493a" />
-        <meta name="description" content="Okume Karaoke, el karaoke más exclusivo de Madrid. Más de 88.000 canciones, reservas de mesa y noches inolvidables en el barrio de Salamanca." />
+        <meta name="theme-color" content="#0f0a08" />
+        <meta name="description" content="Karaoke Katakana: karaoke-bar en Avenida de América, Madrid, desde 2006. Más de 20.000 canciones en varios idiomas, sonido digital, tres ambientes y celebraciones. Reserva tu mesa." />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Karaoke Katakana" />
+        <meta property="og:title" content="Karaoke Katakana | Karaoke-bar en Madrid desde 2006" />
+        <meta property="og:description" content="Canta, celebra y disfruta en Avenida de América, 22. Más de 20.000 canciones, sonido digital y tres ambientes." />
+        <meta property="og:image" content="%PUBLIC_URL%/images/hero-escenario.jpg" />
+        <meta property="og:locale" content="es_ES" />
         <link rel="icon" href="%PUBLIC_URL%/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="%PUBLIC_URL%/icon-192.png" />
@@ -12,6 +18,33 @@
         <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BarOrPub",
+          "additionalType": "https://en.wikipedia.org/wiki/Karaoke_box",
+          "name": "Karaoke Katakana",
+          "alternateName": "Katakana Karaoke Bar",
+          "description": "Karaoke-bar multigeneracional en Madrid desde 2006, con más de 20.000 canciones en varios idiomas, sonido digital y tres ambientes comunicados.",
+          "url": "https://www.karaokekatakana.com/",
+          "telephone": "+34917260183",
+          "email": "katakana1700@yahoo.es",
+          "foundingDate": "2006",
+          "image": "https://www.karaokekatakana.com/images/hero-escenario.jpg",
+          "logo": "https://www.karaokekatakana.com/brand/katakana-logo-light.png",
+          "address": { "@type": "PostalAddress", "streetAddress": "Avenida de América, 22", "postalCode": "28028", "addressLocality": "Madrid", "addressRegion": "Comunidad de Madrid", "addressCountry": "ES" },
+          "geo": { "@type": "GeoCoordinates", "latitude": 40.4387556, "longitude": -3.6741378 },
+          "hasMap": "https://www.google.com/maps/search/?api=1&query=Karaoke+Katakana+Avenida+de+Am%C3%A9rica+22+Madrid",
+          "openingHoursSpecification": [
+            { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "20:00", "closes": "03:30" },
+            { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday", "Saturday"], "opens": "19:00", "closes": "04:00" }
+          ],
+          "sameAs": ["https://www.facebook.com/KaraokeKatakana", "https://www.instagram.com/karaoke_katakana_/"],
+          "servesCuisine": "Copas y bebidas",
+          "acceptsReservations": true
+        }
+        </script>
         <!--
         manifest.json provides metadata used when your web app is installed on a
         user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -25,7 +58,7 @@
         work correctly both with client-side routing and a non-root public URL.
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
-        <title>Okume Karaoke | Madrid canta diferente</title>
+        <title>Karaoke Katakana | Karaoke-bar en Madrid desde 2006</title>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}if(typeof e.message==="string"&&e.message.indexOf("ResizeObserver loop")===0){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>
